@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8">
+  <title>Admin UC Price Dashboard</title>
+  <style>
+    body{font-family:sans-serif;background:#0b1220;color:#fff;padding:20px;}
+    table{border-collapse:collapse;width:100%;margin-top:20px;}
+    th,td{border:1px solid #444;padding:8px;text-align:center;}
+    th{background:#1a2235;}
+    tr:nth-child(even){background:#151d2b;}
+  </style>
+</head>
+<body>
+  <h1>Codashop UC Prices (Auto Update)</h1>
+  <div id="updated"></div>
+  <table>
+    <thead>
+      <tr><th>UC Package</th><th>Price (MMK)</th><th>1 UC = MMK</th></tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <script>
+    async function loadPrices(){
+      const res = await fetch("https://gsd-drx9.onrender.com/api/uc-prices");
+      const data = await res.json();
+      document.getElementById("updated").innerText =
+        "Updated: " + new Date(data.updated).toLocaleString();
+
+      const tbody = document.getElementById("tbody");
+      tbody.innerHTML = "";
+      data.packages.forEach(p=>{
+        // UC = string like "325 UC"
+        const ucNum = parseInt(p.uc);
+        // Price = "MMK 15,000"
+        const priceNum = parseInt(p.price.replace(/[^\d]/g,""));
+        const perUc = priceNum / ucNum;
+        tbody.innerHTML += `<tr>
+          <td>${p.uc}</td>
+          <td>${p.price}</td>
+          <td>${perUc.toFixed(2)} MMK</td>
+        </tr>`;
+      });
+    }
+    loadPrices();
+    setInterval(loadPrices, 1000*60*60); // ၁ နာရီတိုင်း refresh
+  </script>
+</body>
+</html>
