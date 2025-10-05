@@ -1,0 +1,131 @@
+[
+  {
+    "id": "ORD1759211573773",
+    "playerId": "5521456125",
+    "amountUc": 100,
+    "amountK": 1500,
+    "provider": "PUBG",
+    "slip": "1759211573765-743012.jpg",
+    "status": "PAID",
+    "createdAt": "2025-09-30T05:52:53.773Z",
+    "paidAt": "2025-09-30T05:53:38.698Z"
+  },
+  {
+    "id": "ORD1758135603552",
+    "playerId": "52246987088",
+    "amountUc": 300,
+    "amountK": 4500,
+    "provider": "PUBG",
+    "slip": "1758135603539-586450.png",
+    "status": "PAID",
+    "createdAt": "2025-09-17T19:00:03.553Z",
+    "paidAt": "2025-09-17T19:22:36.216Z"
+  },
+  {
+    "id": "ORD1758104879169",
+    "playerId": "52246987088",
+    "amountUc": 300,
+    "amountK": 4500,
+    "provider": "PUBG",
+    "slip": "1758104879156-751695.jpg",
+    "status": "PENDING",
+    "createdAt": "2025-09-17T10:27:59.169Z"
+  },
+  {
+    "id": "ORD1758096782594",
+    "playerId": "52246987088",
+    "amountUc": 600,
+    "amountK": 9000,
+    "provider": "PUBG",
+    "slip": "1758096782590-258545.png",
+    "status": "PAID",
+    "createdAt": "2025-09-17T08:13:02.594Z",
+    "paidAt": "2025-09-17T08:13:38.492Z"
+  },
+  {
+    "id": "ORD1758096741037",
+    "playerId": "52246987088",
+    "amountUc": 300,
+    "amountK": 4500,
+    "provider": "PUBG",
+    "slip": "1758096741024-921760.png",
+    "status": "PAID",
+    "createdAt": "2025-09-17T08:12:21.037Z",
+    "paidAt": "2025-09-17T10:22:13.013Z"
+  },
+  {
+    "id": "ORD1757965559185",
+    "playerId": "52246987088",
+    "amountUc": 600,
+    "amountK": 9000,
+    "provider": "PUBG",
+    "slip": "1757965559169-532331.png",
+    "status": "PAID",
+    "createdAt": "2025-09-15T19:45:59.185Z",
+    "paidAt": "2025-09-15T19:46:53.636Z"
+  },
+  {
+    "id": "ORD1757925145616",
+    "playerId": "52246987088",
+    "amountUc": 600,
+    "amountK": 9000,
+    "provider": "PUBG",
+    "slip": "1757925145604-253026.png",
+    "status": "PAID",
+    "createdAt": "2025-09-15T08:32:25.616Z",
+    "paidAt": "2025-09-15T08:33:45.739Z"
+  },
+  {
+    "id": "ORD1757608147774",
+    "playerId": "52246987088",
+    "amountUc": 600,
+    "amountK": 9000,
+    "provider": "PUBG",
+    "slip": "1757608147771-819038.jpg",
+    "status": "PAID",
+    "createdAt": "2025-09-11T16:29:07.774Z",
+    "paidAt": "2025-09-11T16:29:33.271Z"
+  },
+  {
+    "id": "ORD1757608114483",
+    "playerId": "52246987088",
+    "amountUc": 100,
+    "amountK": 1500,
+    "provider": "PUBG",
+    "slip": "1757608114474-705710.jpg",
+    "status": "PENDING",
+    "createdAt": "2025-09-11T16:28:34.483Z"
+  },
+  {
+    "id": "ORD1757607106304",
+    "playerId": "52246987088",
+    "amountUc": 600,
+    "amountK": 9000,
+    "provider": "PUBG",
+    "slip": "1757607106300-278982.jpg",
+    "status": "PAID",
+    "createdAt": "2025-09-11T16:11:46.304Z",
+    "paidAt": "2025-09-11T16:12:55.324Z"
+  },
+  {
+    "id": "ORD1757607037267",
+    "playerId": "52246987088",
+    "amountUc": 100,
+    "amountK": 1500,
+    "provider": "PUBG",
+    "slip": "1757607037255-767032.jpg",
+    "status": "PENDING",
+    "createdAt": "2025-09-11T16:10:37.267Z"
+  },
+  {
+    "id": "ORD1757606156561",
+    "playerId": "52246987088",
+    "amountUc": 300,
+    "amountK": 4500,
+    "provider": "PUBG",
+    "slip": "1757606153839-536739.png",
+    "status": "PAID",
+    "createdAt": "2025-09-11T15:55:56.561Z",
+    "paidAt": "2025-09-11T15:57:00.890Z"
+  }
+]
