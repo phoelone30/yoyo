@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title></title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="video-banner">
+    <video autoplay muted loop playsinline>
+      <source src="img/banner.mp4" type="video/mp4">
+  
+    </video>
+    <div class="overlay-text">KHIT_B.DEE</div>
+  </div>
+
+  <div class="container" style="font-size: small;" >  
+    <h1></h1>
+    <form id="orderForm">
+      <label>Player ID<br><input id="playerId" name="playerId" required></label>
+      <label>Choose UC<br>
+        <select id="amountUc" name="amountUc">
+          <option value="60">60 UC</option>
+          <option value="300">300 UC</option>
+          <option value="600">600 UC</option>
+          <option value="1500">1,500 UC</option>
+          <option value="3000">3,000 UC</option>
+          <option value="6000">6,000 UC</option>
+        </select>
+      </label>
+      <p>Price: <span id="priceK">—</span></p>
+
+      <label>Payment slip(Image)<br><input type="file" id="slip" name="slip" accept="image/*" required></label>
+      <button type="submit">Submit Order</button>
+    </form>
+
+    <div id="msg"></div>
+  </div>
+
+  <script>
+  const rates = { // rate: 1 UC = 80 MMK * UC (edit)
+  60: 60 * 80,
+  300: 300 * 80,
+  600: 600 * 80,
+  1500: 1500 * 80,
+  3000: 3000 * 80,
+  6000: 6000 * 80  
+};
+const sel = document.getElementById('amountUc');
+const priceEl = document.getElementById('priceK');
+function updatePrice(){ priceEl.textContent = rates[sel.value] + ' MMK'; }
+sel.addEventListener('change', updatePrice);
+updatePrice();
+
+  document.getElementById('orderForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const playerId = document.getElementById('playerId').value.trim();
+    const amountUc = document.getElementById('amountUc').value;
+    const slip = document.getElementById('slip').files[0];
+    if(!playerId || !slip) return alert('Please fill fields');
+
+    const amountK = rates[amountUc] || 0;
+    const fd = new FormData();
+    fd.append('playerId', playerId);
+    fd.append('amountUc', amountUc);
+    fd.append('amountK', amountK);
+    fd.append('slip', slip);
+
+    document.getElementById('msg').textContent = 'Uploading...';
+    try {
+      const resp = await fetch('https://gsd-drx9.onrender.com/order', { method: 'POST', body: fd });
+      const data = await resp.json();
+      if(data.ok){
+        document.getElementById('msg').textContent = 'Order submitted! Order ID: ' + data.order.id;
+        document.getElementById('orderForm').reset();
+        updatePrice();
+      } else {
+        document.getElementById('msg').textContent = 'Error: ' + (data.error || 'unknown');
+      }
+    } catch(err){
+      document.getElementById('msg').textContent = 'Upload failed: ' + err.message;
+    }
+  });
+  </script>
+
+  <style>
+  .video-banner {
+        position: relative;
+        width: 100%;
+        max-width: 835px;      /* Desktop banner size */
+        aspect-ratio: 950/320;  /* Banner ratio */
+        overflow: hidden;
+        border-radius: 10px;
+        margin: 10px auto;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      }
+
+      .video-banner video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;   /* Container အပြည့်ဖြည့် */
+      }
+
+      .video-banner .overlay-text {
+        position: absolute;
+        bottom: 10px;
+        left: 15px;
+        color: #FFD700;
+        font-family: Impact, sans-serif;
+        font-size: 1.2rem;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+      }
+
+      @media (max-width: 600px) {
+        .video-banner {
+          max-width: 100%;
+          aspect-ratio: 16/7; /* Phone ratio */
+        }
+        .video-banner .overlay-text {
+          font-size: 1rem;
+        }
+      }  
+  body{
+        background-image: url('https://www.pubgmobile.com/images/event/royalepass/thum4_en.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+      }
+      @media (max-width: 768px) {
+        body {
+          background-attachment: scroll; /* ဖုန်းတွေမှာ fixed က lag ဖြစ်တတ် */
+          background-position: center top; /* ပေါ်ထပ်တည့်ချင်ရင် */
+        }
+      }
+      @media 
+          (max-width: 768px) {
+          .cover {
+          height: 60vh; /* ဖုန်းမှာ အမြင့်ကို ညှိ */
+          }
+        }
+  .responsive-img {
+          max-width: 100%;  /* screen အကျယ်အတိုင်း */
+          height: auto;     /* အချိုးမပြိုအောင် */
+          display: block;   /* inline space ဖယ်ရန် */
+          margin: 0 auto;   /* အလယ်တည့်ချင်ရင် */
+      }      
+  .box {
+        width: 100%;           /* screen အကျယ်အတိုင်း */
+        max-width: 400px;      /* အများဆုံးအကျယ် */
+        aspect-ratio: 16/9;    /* အချိုး (responsive height) */
+        border-radius: 12px;   /* အနားကို ကွေးချင်ရင် */
+        margin: 20px auto;     /* အလယ်တည့် */
+      }
+  </style>
+</body>
+</html>
