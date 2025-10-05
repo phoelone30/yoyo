@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin - Site</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>House Of Admin</h1>
+
+    <!-- 1 UC Rate Control -->
+    <label for="ucRateInput">1 UC = </label>
+    <input id="ucRateInput" type="number" value=""> MMK
+    <button id="updateRate">Update Rating</button>
+    <p id="ucRateText"></p>
+
+    <hr>
+
+    <p>Enter Your Password</p>
+    <input id="adminKey" placeholder="Admin Key">
+    <button id="loadBtn">Load orders</button>
+    <div id="orders"></div>
+  </div>
+  
+
+<script>
+const loadBtn = document.getElementById('loadBtn');
+const ordersDiv = document.getElementById('orders');
+const ucRateInput = document.getElementById('ucRateInput');
+const ucRateText = document.getElementById('ucRateText');
+
+// === UC Rate Update ===
+document.getElementById('updateRate').addEventListener('click', ()=>{
+  const rate = ucRateInput.value.trim();
+  if(!rate) return alert("Rate required");
+  localStorage.setItem("ucRate", rate);
+  ucRateText.textContent = "လက်ရှိ ဈေးနှုန်း ➝ 1 UC = " + rate + " MMK";
+  alert("UC Rate Updated!");
+});
+(function initRate(){
+  const r = localStorage.getItem("ucRate") || ucRateInput.value;
+  ucRateText.textContent = "လက်ရှိ ဈေးနှုန်း ➝ 1 UC = " + r + " MMK";
+})();
+
+// === Orders Load ===
+loadBtn.addEventListener('click', async ()=>{
+  const key = document.getElementById('adminKey').value.trim();
+  if(!key) return alert('Admin Key required');
+  ordersDiv.innerHTML = 'Loading...';
+  try {
+    const r = await fetch('https://gsd-drx9.onrender.com/admin/orders', { headers: {'x-admin-key': key }});
+    const j = await r.json();
+    if(!r.ok){ ordersDiv.textContent = 'Error: ' + (j.error||r.status); return; }
+    if(!j.orders || j.orders.length === 0){ ordersDiv.textContent = 'No orders'; return; }
+    ordersDiv.innerHTML = '';
+    j.orders.forEach(o=>{
+      const el = document.createElement('div');
+      el.className = 'order';
+      el.innerHTML = `<b>${o.id}</b> - ${o.playerId} - ${o.amountUc} UC - ${o.amountK} MMK - <i>${o.status}</i>
+        <br>${o.createdAt}
+        <br>${o.slip ? '<a href="https://gsd-drx9.onrender.com/uploads/'+o.slip+'" target="_blank">View slip</a>' : 'No slip'}
+        <br><button class="markpaid" data-id="${o.id}">Mark PAID</button>
+        <hr>`;
+      ordersDiv.appendChild(el);
+    });
+
+    document.querySelectorAll('.markpaid').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const id = btn.dataset.id;
+        btn.disabled = true;
+        // Normally send request to backend
+        // Here update localStorage to notify customer page
+        localStorage.setItem("orderStatus_"+id, "paid");
+
+        const r2 = await fetch('https://gsd-drx9.onrender.com/admin/mark-paid', {
+          method:'POST',
+          headers: {'Content-Type':'application/json','x-admin-key': key},
+          body: JSON.stringify({id})
+        });
+        const j2 = await r2.json();
+        if(j2.ok) alert('Marked PAID: ' + id);
+        else alert('Error: ' + (j2.error||'unknown'));
+        loadBtn.click();
+      });
+    });
+
+  } catch(err){
+    ordersDiv.textContent = 'Failed: ' + err.message;
+  }
+});
+</script>
+
+<style>
+body {
+  background-image: url('https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2025/01/PUBG-Mobile-Version-3.6.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+</style>
+
+</body>
+</html>
