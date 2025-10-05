@@ -1,0 +1,17 @@
+{
+  "name": "codashop-myanmar-demo",
+  "version": "1.0.0",
+  "description": "Simple demo Codashop-like site (PUBG UC) with upload-to-telegram and admin mark-paid flow",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "form-data": "^4.0.4",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.7.0"
+  }
+}
