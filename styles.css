@@ -1,0 +1,6 @@
+body{font-family:system-ui,Arial;background:#f6f7fb;color:#222;margin:0;padding:20px}
+.container{max-width:800px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
+label{display:block;margin:10px 0}
+input,select{width:100%;padding:8px;margin-top:6px;border:1px solid #ddd;border-radius:6px}
+button{padding:10px 14px;border:none;background:#1e88e5;color:#fff;border-radius:6px;cursor:pointer}
+.order{padding:8px 0}
