@@ -1,0 +1,210 @@
+OAK [9/21/2025 12:34 PM]
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UC → USD → MMK Converter</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #6366f1;
+      --muted: rgba(255,255,255,0.6);
+    }
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(180deg, #0f172a, #1e293b 80%);
+      color: #f8fafc;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+    }
+    p.desc {
+      margin: 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    input {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 16px;
+    }
+    input:focus {
+      outline: 2px solid var(--accent);
+      background: rgba(255,255,255,0.12);
+    }
+    .btn {
+      padding: 12px;
+      border-radius: 14px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn:hover {
+      background: #4f46e5;
+    }
+    .result {
+      background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.05));
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+    }
+    .result .big {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .result .sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .pill {
+      background: rgba(255,255,255,0.08);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+    /* Tablet/Desktop */
+    @media (min-width: 640px) {
+      .card {
+        padding: 28px;
+      }
+      h1 { font-size: 22px; }
+      .result .big { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>UC → USD → MMK</h1>
+      <p class="desc">UC အရေအတွက်ထည့်ပါ၊ USD သို့ ပြောင်းပြီး MMK ကို အလိုအလျောက် တွက်ပေးပါမယ်။</p>
+
+      <div class="field">
+        <label for="ucAmount">UC အရေအတွက်</label>
+        <input id="ucAmount" type="number" value="60" />
+      </div>
+
+      <div class="field">
+        <label for="usdPer60">60 UC = ? USD</label>
+        <input id="usdPer60" type="number" value="0.99" step="0.01" />
+      </div>
+
+      <div class="field">
+        <label for="usdToMmk">1 USD = ? MMK</label>
+        <input id="usdToMmk" type="number" value="2100" />
+      </div>
+
+      <button id="refreshBtn" class="btn">Refresh Live Rate</button>
+
+      <div class="result">
+        <div id="usdTotal" class="big">0.00 USD</div>
+        <div id="mmkTotal" class="big">0 MMK</div>
+        <div class="sub">လက်ရှိအခြေအနေ</div>
+        <div class="pills">
+          <span id="detailUc" class="pill">—</span>
+          <span id="detailRate" class="pill">—</span>
+          <span id="sourceNote" class="pill">Default rate</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let defaultUsdToMmk = 2100;
+
+    const ucInput = document.getElementById('ucAmount');
+
+const usdPer60Input = document.getElementById('usdPer60');
+    const usdToMmkInput = document.getElementById('usdToMmk');
+    const usdTotalEl = document.getElementById('usdTotal');
+    const mmkTotalEl = document.getElementById('mmkTotal');
+    const detailUc = document.getElementById('detailUc');
+    const detailRate = document.getElementById('detailRate');
+    const sourceNote = document.getElementById('sourceNote');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    function fmt(n, d=2){ return Number(n||0).toLocaleString(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}); }
+    function fmtInt(n){ return Math.round(n||0).toLocaleString(); }
+
+    function calc() {
+      const uc = parseFloat(ucInput.value) || 0;
+      const usdPer60 = parseFloat(usdPer60Input.value) || 0;
+      const rate = parseFloat(usdToMmkInput.value) || defaultUsdToMmk;
+      const usdTotal = (uc/60)*usdPer60;
+      const mmkTotal = usdTotal*rate;
+      usdTotalEl.textContent = fmt(usdTotal,2)+" USD";
+      mmkTotalEl.textContent = fmtInt(mmkTotal)+" MMK";
+      detailUc.textContent = uc+" UC → "+fmt(usdTotal,2)+" USD";
+      detailRate.textContent = "1 USD = "+fmt(rate,2)+" MMK";
+    }
+
+    async function fetchRate(){
+      sourceNote.textContent = "Fetching…";
+      try{
+        const r = await fetch("https://api.exchangerate.host/latest?base=USD&symbols=MMK");
+        const j = await r.json();
+        if(j && j.rates && j.rates.MMK){
+          usdToMmkInput.value = j.rates.MMK;
+          sourceNote.textContent = "Live rate";
+        } else {
+          sourceNote.textContent = "Using default";
+        }
+      }catch(e){
+        sourceNote.textContent = "Using default";
+      }
+      calc();
+    }
+
+    [ucInput, usdPer60Input, usdToMmkInput].forEach(el=>el.addEventListener("input",calc));
+    refreshBtn.addEventListener("click",fetchRate);
+
+    calc();
+    fetchRate();
+  </script>
+</body>
+</html>
