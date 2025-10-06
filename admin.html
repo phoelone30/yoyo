@@ -26,6 +26,12 @@
   
 
 <script>
+// === Admin Login Check ===
+const key = sessionStorage.getItem("adminKey");
+  if(!key){
+  window.location.href = "login.html"; // key ပြန်ပို့
+  }
+
 const loadBtn = document.getElementById('loadBtn');
 const ordersDiv = document.getElementById('orders');
 const ucRateInput = document.getElementById('ucRateInput');
@@ -90,6 +96,12 @@ loadBtn.addEventListener('click', async ()=>{
     ordersDiv.textContent = 'Failed: ' + err.message;
   }
 });
+
+// === Logout ===
+function logout() {
+  sessionStorage.removeItem("adminKey");
+  window.location.href = "login.html";
+}
 </script>
 
 <style>
