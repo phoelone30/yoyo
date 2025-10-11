@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
-const ADMIN_KEY = process.env.ADMIN_KEY || 'change_this_admin_key';
+const ADMIN_KEY = process.env.ADMIN_KEY || '215355';
 
 app.use(cors());
 app.use(express.json());
